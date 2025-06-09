@@ -115,3 +115,54 @@ Spring Boot internally uses **Jackson**, a powerful JSON processor library, to h
 
 ---
 
+
+
+
+
+@JsonRawValue 
+Used to inject already serialised values into JSON
+It marks method or field whoes value should be included as literal string value of the property as is and without quoting or characters 
+most commonly used for injecting already serialised JSON string, can also be used to parse JS function to JS clients
+
+
+@JsonRootName
+Specifies the root name for the serialization, this annotation is used to specify a name to use for the root level name for serialised object  by default the calss name i sused
+class level annotation
+
+@JsonValue
+used to identify a method that returns the instaces of the json annotation.
+marks the method that returns the seralisation of the ob object.
+singature must be non void and argument free, normally be scaler but can also be any serialisable type scuh as map
+jackson will not serialise itself but call the annotated method
+only one method can be annotated in this way, if more than one then exception wil be thrown.
+you cannot retunr a full json strign you need to retunr a serialisable object such as map.
+
+@JsonAnyGetter
+mark a method whoes return value is a map
+flattens the map into key value pairs, brings key value upto the root level as then they are serialised.
+only one allowed per class
+reverse of @JsonAnySetter annotation
+
+
+## Json Deserialization
+mapping the properties of the JSON data string to an instance of a class
+
+@JsonSetter
+used to identify a method as a setter method for a specific property
+useful when json data has a property name that doesnot quite match the property of the target
+should be non static and should accept a single argument
+during deserialisation the annotated method is called and the json property that is mapped to this method is identified by the name pass to the annotation as value
+alternative @JsonProperty
+
+@JsonAnySetter
+used to identify a method as a setter method for mapper properties
+marks method as setter method for map property
+method should be non static and accept 2 arguments (key, value)
+during de serialisation the annotated method is called, and properties and values of the Json string are passed to the method
+method should implement code to add key value pairs to map
+
+
+@JsonCreator
+used to define constrcutor methods, used to mark constructor or factory method, used to create instances during deserialisation
+often used in cooperation with @JsonProperty annotation to specify property names
+used to deserialise the mismatch property name
